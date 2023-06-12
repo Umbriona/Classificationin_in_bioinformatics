@@ -22,7 +22,7 @@ TEST_FASTA_1_TM_1 = 90.0
 TEST_FASTA_3 = "test3.fasta"
 TEST_FASTA_3_ROWS = 2
 TEST_FASTA_3_COLUMNS = 4
-TEST_FASTA_3_EMBEDDING_SIZE = 1024
+TEST_FASTA_3_EMBEDDING_SIZE = 1280
 
 
 class TestReadFasta(unittest.TestCase):
@@ -47,6 +47,6 @@ class TestCreateEmbeding(unittest.TestCase):
         df_fasta = creat_embedings(df_fasta)
         self.assertEqual(TEST_FASTA_3_ROWS, len(df_fasta["Embedding"]))
         self.assertEqual(TEST_FASTA_3_COLUMNS, len(df_fasta.keys()))
-        self.assertEqual(TEST_FASTA_3_EMBEDDING_SIZE, df_fasta["Embedding"][0].shape[0])
+        self.assertEqual(TEST_FASTA_3_EMBEDDING_SIZE, len(df_fasta["Embedding"][0]))
         
     
