@@ -43,22 +43,23 @@ def creat_embedings(df_fasta):
     
     ## Set transformer parameters 
     transformers.logging.set_verbosity_error()
-    pipe = pipeline('feature-extraction', model='facebook/esm1b_t33_650M_UR50S')
+    pipe = pipeline('feature-extraction', model='facebook/esm1b_t33_650M_UR50S', device=1)
 
     embeddings_list = []
     # Exctract CLS embeddings from ESM
-    for prot in df_fasta["seq"]:
+    for idx, prot in enumerate(df_fasta["seq"]):
         this_embedding = pipe(prot)
         ## CLS extaction
         cls_token = this_embedding[0][0]
         embeddings_list.append(cls_token)
-        #embeddings_list.append(np.zeros((1024,)))
+        if idx % 100 ==0:
+            print(f"Done with {idx} Embeddings")
     assert len(embeddings_list) == len(df_fasta["seq"])
     df_fasta["Embedding"] = embeddings_list
     return df_fasta
 
-def write_pickel(df_fasta, args):
-    with open(args.output) as f:
+def write_pickel(df_fasta, output):
+    with open(output, 'wb') as f:
         pickle.dump(df_fasta, f)
     
 
@@ -70,7 +71,7 @@ def main(args):
     return 0
 
 if __name__ == "__main__":
-    args = parser.parse_arguments()
+    args = parser.parse_args()
     main(args)
 
 

@@ -1,0 +1,15 @@
+name: graph
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - pandas
+  - matplotlib
+  - tensorflow-gpu
+  - biopython
+  - seaborn
+  - jupyterlab
+  - pip
+  - pip:
+    - transformers[torch]
+    - gdown
