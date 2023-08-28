@@ -2,6 +2,8 @@
 # 1 Abstract
 Building dependable predictive models has gained significant importance in broadening the toolkits available to bioinformaticians. Nonetheless, many challenges persist, even with the exponential expansion of biological data, notably the scarcity and imbalance in high-quality labeled datasets. The demand for effective utilization of transfer learning approaches and strategies for handling imbalanced data is poised to grow further. In this work, we demonstrate how to leverage large protein language models (pLMs) to extract features, enabling the creation of more robust representations for a small, imbalanced dataset such as Jarzab et al.'s meltome dataset. Additionally, we employ upsampling techniques to enhance recall of the minority class.
 
+All the codes to reproduce the results are available in this repository as notebooks.
+
 
 
 
