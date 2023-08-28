@@ -1,157 +1,130 @@
-# Methodology for making classification models for biological sequence data.
-With the next generatin sequenceing technologies sequence data in biotechnology has grown exponentially. With this new vast amount of data it is important to know how to use this data effectivly.  While the volume of raw sequence data as increased, charictarised (labled) data has not increased the same way. Further more the labled data we do have is ofthen heavily unbalanced. It is impo
-
-When evaluating classification/regression models for sequence data it is important to take the evolutionary nature of the data in to consideration. Since the evolutionary process will make the data points corrolate with one another. Thus one needs to correct for this when splitting the data. 
-
-# Introduction
-
-# Background
-## Large language models
-
-### Masked language task
-
-### Large Language Models for Proteins
-In recent years, the field of bioinformatics has witnessed remarkable advancements driven by the application of machine learning techniques. Among these, large language models have emerged as a powerful tool for analyzing biological data, particularly in the context of proteins. Just as these models have revolutionized natural language processing tasks, they have also shown promise in unraveling the intricate language of protein sequences and structures.
-
-The architecture of large language models draws inspiration from the Transformer model, which has proven to be highly effective for capturing contextual relationships within sequences. These models, such as the BERT (Bidirectional Encoder Representations from Transformers) architecture, have been adapted and extended to accommodate the unique characteristics of protein sequences and structures. The underlying principle of these models lies in their ability to learn complex patterns and dependencies by considering the interplay of amino acids within a sequence or residues within a protein structure.
-
-### Pretraining with Masked Sentence Tasks
-The key to the success of large language models lies in their pretraining phase, during which they learn rich representations from massive amounts of unlabeled data. For proteins, this involves encoding sequence information to capture both local and long-range dependencies. The pretraining process involves masked sentence tasks, wherein a portion of the input sequence is masked, and the model is trained to predict the masked elements based on the surrounding context. This encourages the model to learn features that are essential for understanding protein sequences and structures.
-
-In the context of proteins, the masked sentence task involves predicting missing amino acids within a sequence or residues within a protein structure. This process forces the model to grasp the nuances of sequence motifs, secondary structure elements, and potential functional sites. By training on large datasets, these models become adept at extracting intricate features that human-designed algorithms might miss.
-
-### Utilizing Embeddings for Protein Analysis
-Once pretrained, these language models can be fine-tuned for specific tasks, such as protein structure prediction, function annotation, or classification. An invaluable output of these models is the embeddings—vector representations of protein sequences or structures in a high-dimensional space. These embeddings encode the acquired knowledge about proteins, capturing their structural, functional, and evolutionary characteristics.
-
-These embeddings can be harnessed for diverse downstream applications. For instance, researchers can use them to cluster similar proteins, classify protein families, predict protein functions, or assess structural similarities. The high-dimensional nature of these embeddings enables the model to differentiate subtle differences between proteins, leading to enhanced accuracy and performance across a range of tasks.
-
-In conclusion, large language models designed for proteins leverage the power of pretraining with masked sentence tasks to learn rich representations from unlabeled data. These embeddings can then be utilized for various downstream analyses, offering new avenues for understanding protein sequences and structures in ways previously unattainable by traditional methods.
-
-
-# Results
-
-## Principal component analysis and dimensionality reduction of embeddings
-
-To visulise the embeddings of the sequences we can project the dat on to its princial components. This will alow us to view the linear representations of the data containing the most information. In figure 1 we have plotted the embedded data in the first two prinsiple components
-
-
-## Stochastic gradient decent regression
-
-## Regression with neural network
-
-## Resampling techniques
-
-# Descussion
-
-# Conclusion
-
-# Methodology
+# Effective utilization of Protein Language models (pLM) for unbalanced biological data.
+# 1 Abstract
+Building dependable predictive models has gained significant importance in broadening the toolkits available to bioinformaticians. Nonetheless, many challenges persist, even with the exponential expansion of biological data, notably the scarcity and imbalance in high-quality labeled datasets. The demand for effective utilization of transfer learning approaches and strategies for handling imbalanced data is poised to grow further. In this work, we demonstrate how to leverage large protein language models (pLMs) to extract features, enabling the creation of more robust representations for a small, imbalanced dataset such as Jarzab et al.'s meltome dataset. Additionally, we employ upsampling techniques to enhance recall of the minority class.
 
 
 
-## Protein Data Preprocessing
-The protein dataset used in this study consisted of 60,000 protein sequences obtained from [source]. Prior to analysis, the dataset underwent initial preprocessing steps to ensure data quality and suitability for subsequent clustering and analysis. These preprocessing steps included [briefly describe any data preprocessing steps, such as sequence cleaning or feature extraction].
 
-## Protein Clustering with CD-HIT
-To reduce redundancy within the protein dataset and capture representative sequences, the CD-HIT software was employed for clustering. CD-HIT is a widely-used tool for sequence clustering based on sequence similarity, effectively grouping similar sequences into clusters while eliminating duplications. The clustering process was executed using a sequence similarity threshold of 95%, resulting in the formation of distinct clusters representing diverse protein sequences.
 
+
+
+
+
+
+# 2 Introduction and Background.
+In the field of biotechnology, when encountering a novel sequence, whether it is DNA or a protein, there is often a need to gather additional information about it. This may include functional data, such as homology and function, or physical characteristics, such as solubility, stability, and structure. For most of these attributes, established methods like BLAST for identifying homologous sequences (Johnson et al., 2008) or homology modeling for predicting structure (Webb et al., A. 2016) have traditionally been used. However, there has been a recent surge of interest in developing new deep learning approaches to address these tasks.
+For tasks like structure prediction and remote homology modeling, recent advancements like Alpha Fold 2 by Jumper et al. (2021) and ESM-1b by Rives et al. (2021) have demonstrated superior performance compared to classical approaches. These models have been trained on extensive datasets, some containing up to 10 million sequences in the case of ESM-1b. The importance of such large datasets in training machine learning models lies in their ability to facilitate the construction of rich data representations, enabling the model to effectively distinguish data points based on the target property. This underscores the scalability of machine learning methods with data volume—more data often leads to better internal data representations. 
+However, most of the datasets used in biotechnology do not approach the same scale, not due to a lack of sequences per se but rather due to the scarcity of labeled data containing information about the property of interest. Such labels can only be acquired through costly experimental procedures. To address this data scarcity for specific tasks, transfer learning can be used, where features learned by models trained on other tasks are leveraged. Extracting features from protein language models (pLMs) like ESM-1b has proven effective for constructing classification models for small datasets (Rives et al., 2021). 
+In addition to limited labeled samples, many biological datasets suffer from imbalances concerning their target variables. Complex machine learning models, such as neural networks, can be highly sensitive to these imbalances within their training data. Unfortunately, it is common that the regions where we have the fewest samples are precisely the regions of greatest interest. Therefore, it is crucial not only to assess the global performance of predictive models on the data but also to evaluate their performance in the specific use case of interest. In this work, we have conducted an evaluation of both transfer learning and resampling techniques to address the challenges posed by low sequence counts and imbalanced data in the Jarzab et al.'s meltome dataset.
+
+
+![PCA_TSNE](results/img/Dimensionality_reduction-2.png)
+Figure 1. a) PCA visualization of proteins embedded with ESM-1v. b) T-SNE dimensionality reduction of embedded proteins. 
+Figure 1
+# 3 Results
+This section presents the results gathered when developing a methodology for implementing regression models based on average embeddings. We use a threshold of  60 °C to separate mesophilic and thermophilic proteins. Only the analysis of the data composition and the embedded features are done using the whole data set. All evaluations of trained models were done on the test set after hyperparameter optimization was completed.
+## 3.1 Principal Component Analysis and nonlinear dimensionality reduction.
+ PCA was performed to explore the distribution and separation of the proteins in the embedded dataset. The first principal components, PC1 and PC2, were extracted and analyzed for their ability to capture the underlying variation. For these two components, the combined variance was limited to ~18%, with the first component accounting for 14%. Plotting the two components in (Figure 1 a) reveals only a tiny separation between thermophilic and mesophilic proteins. To further investigate the separation between mesophilic and thermophilic proteins, T-SNE was employed as a non-linear dimensionality reduction technique. Plotting the two T-SNE components (Figure 1 b) showed only a marginal improvement in separating the two classes. In summary, the PCA and T-SNE analyses demonstrated that the proteins embedded using the ESM-1v model lack pronounced separation when projecting the data to lower dimensions. Coupled with the fact that the principal component individually contains only small parts of the variance of the data, further classification and regression tasks should utilize the full dimensionality of the embeddings. 
+
+![correlation](results/img/correlation_Identity_vs_temp_diff.png)
+Figure 2. a)  Plot showing the range of Tm between sequences at different levels of sequence similarities. b) Plot showing the level of correlation between identity and Tm at different ranges of identity. 
+
+## 3.2 Correlations between protein melting temperature (Tm) and protein similarity.
+To avoid information leakage between our training, validation, and test set, it is good practice to cluster your sequences and split the data based on the clusters (AlQuraishi, 2019). The variance and correlation between Tm and sequence identity were calculated to determine the identity at which the data needed to be clustered. The identity at which the data were split was set to 60% based on the high variance of Tm and low correlation between identity and Tm, as shown in Figure 2 a,b. To establish that the distribution of Tm values did not deviate too much from one another, their histograms were compared (Figure 3). 
+
+![temp distribution](results/img/temperature_distributions.jpeg)
+Figure 3. Histograms over temperature distributions of data after splitting into training, validation, and test sets. 
+
+## 3.3 Predicting Tm with regression models.
+To make a Tm predictor, both a standard linear model and a neural network were compared. Both the linear model parameters as well as the parameters for the neural network were manually tuned based on the performance of the validation set. Both models were then evaluated based on their performance on several metrics shown in Table 1. The neural network significantly outperforms the linear model on all metrics except the recall of the thermophiles, where it performs on par with the linear model. Plotting the predicted Tm from both models against the true temperature (Figure 4 a,b) further reveals that the neural network tends to overestimate Tm to a higher degree than the linear model. 
+
+
+
+| | Linear model | Neural network |
+| :--- | :---: | :---: |
+| R2 | 0.25 | 0.40 |
+| Standard error | 5.18 | 3.84 |
+| Recall at 60 | 0.40 | 0.41 |
+| Precision at 60 | 0.62 | 0.84 |
+| F1 | 0.49 | 0.55 |
+
+Table 1. Evaluation of linear model and neural network performance.  
+
+![SGD NN](results/img/SGD_NN_performance.png)
+Figure 4 a) Evaluation of linear model on the test set. b) Evaluation of neural network on test set
+
+## 3.4 Increasing recall of thermophiles for neural networks by oversampling.
+To increase the recall of thermophiles, two resampling methods were evaluated, sampling all Tm values a minimum of 500 times and uniformly sampling all Tm values. Both the different sampling methods increase the recall of thermophiles at the expense of the precision of the thermophiles, as seen in Figure 6. However, the harmonic mean of recall and precision (F1) shows no significant difference between the two sampling techniques. Further investigation by plotting the predicted against the real Tm for the two sampling techniques does not reveal any major difference between the two. 
+
+![scaling](results/img/TrainingSet_Scaling.png)
+Figure 5 a) Performance evaluation of minimum 500 sampling strategy. b) Performance evaluation of uniform sampling strategy
+
+![scaling](results/img/img_scores_at_60-2.png)
+Figure 6. Evaluations of recall precision and F1 scores for different sampling strategies and baseline models. 
+
+# 4 Discussion and conclusion
+With the dataset utilized in this study, we have demonstrated a negative correlation between sequence identity and thermal stability for identities exceeding 60%. Consequently, it becomes imperative to cluster the data at a minimum of this threshold when partitioning it into training, validation, and test sets to mitigate the risk of information leakage. Moreover, for different tasks and datasets like structure prediction, clustering at even lower percentages has proven to be essential.
+
+Large language models, such as ESM models, have potential uses far beyond what they were trained to do. In this work, we were able to outline a simple pipeline of how to utilize protein embeddings generated by such models. While we did not compare our model to those trained on more superficial sequence data representations like one-hot encoded sequences, the advantages of using fixed-dimensional embeddings often outweigh minor performance improvements. 
+
+In both dimensionality reduction and temperature prediction tasks, we demonstrate that non-linear methods like T-SNE and neural networks outperform linear techniques such as linear regression and PCA. This suggests that the embeddings generated by ESM-1v possess rich non-linear dependencies that could extend beyond thermal stability prediction. 
+
+While we did not directly compare the effects of transfer learning by embedding features from pLMs, we have seen from previous works in Li et al. (2022) that using a less rich representation of the sequence space, such as one hot encoding, benefits significantly with transferring learning. 
+
+The data used in this work is heavily imbalanced, where most sequences were in the mesophilic range. However, we show that we can control the performance at different metrics, such as recall of thermophiles, by oversampling the data portions with few samples, such as the thermophilic range. The increase in recall did come with a detriment to other metrics, such as the precision of thermophiles. There exists a clear tradeoff between recall and precision that can be controlled by the level of oversampling. 
+
+There are more sophisticated oversampling techniques that have demonstrated significant promise for handling other types of data. One such technique is known as SMOTE (Chawla, 2002), which interpolates between data points to mitigate the risk of overfitting in sparse regions when applying aggressive oversampling. Given the prevalence of unbalanced data in biotechnology, it will be important to investigate the efficacy of these sampling techniques for biological data such as protein embeddings. 
+
+# 5 Methods and materials.
+## 5.1 Data set
+The protein dataset used in this study consisted of 48000 protein sequences from the meltome atlas published by Jarzab et al. (Jarzab et al., 2020). Prior to analysis, the dataset underwent initial preprocessing steps to ensure data quality and suitability for subsequent clustering and analysis. 
+## 5.2 Protein pruning out redundancy with CD-HIT
+To reduce redundancy within the protein dataset and capture representative sequences, the CD-HIT software was employed for clustering(Fu et al., 2012). CD-HIT is a widely used tool for sequence clustering based on sequence similarity, effectively grouping similar sequences into clusters while eliminating duplications. The clustering process was executed using a sequence similarity threshold of 95%, resulting in the formation of distinct clusters representing diverse protein sequences.
 The first clustering step at 95% sequence similarity was intended to remove redundant sequences from the dataset, ensuring that only representative sequences were retained for downstream analysis.
-
-## Construction of Independent Data Splits
-For the purpose of model training, validation, and testing, an additional clustering step was performed using the CD-HIT tool. This time, the dataset was clustered at a lower sequence similarity threshold of 30%. The clusters obtained from this step were employed to construct independent data splits for training, validation, and testing.
-
-Specifically, for the validation and test sets, a subset of clusters containing a single representative sequence was selected. The total number of selected clusters was set to 2000 for each of the validation and test sets. The remaining sequences, which were not included in the selected clusters, were designated as the training set.
-
-The rationale behind this approach was to ensure that the validation and test sets were representative of the diversity present in the protein dataset while maintaining independence from the training set. The clustering-based data split construction enabled the model to be trained on distinct sequences that were not present in the validation or test sets, thereby preventing information leakage and ensuring unbiased evaluation.
-
-## Extracting embeddings from ESM
-
+## 5.3 Clustering and data partition of independent train, validation and test set.
+For the purpose of model training, validation, and testing, an additional clustering step was performed using the mmseqs 2 tool (Steinegger et al., 2018). This time, the dataset was clustered at a lower sequence similarity threshold of 60%. The clusters obtained from this step were employed to construct independent data splits for training, validation, and testing.
+The assembly of validation and test set were made using clusters containing only one sequence, to limit bias towards any clusters. Both validation and test set were constructed out of 3,000 such sequences. The remaining sequences were all placed in the training set.
+## 5.4 Extracting embeddings from ESM-1v.
 The ESM-1v (Evolutionary Scale Modeling) model has demonstrated significant capabilities in capturing complex patterns and features within protein sequences. To extract embeddings from this model, we employed a process that involved utilizing the final layer's outputs to obtain a meaningful representation of each protein sequence.
-
 The ESM-1v model was initially pretrained on a vast corpus of protein sequences, learning to encode various sequence motifs, structural properties, and evolutionary relationships. The final layer of the model contains high-dimensional embeddings that encapsulate these learned features. In our study, we extracted embeddings for individual protein sequences by focusing on the averaged embeddings from this last layer.
+## 5.5 Embedding Extraction Procedure
+For each protein sequence in the dataset, we fed the sequence through the ESM-1v model and extracted per token embeddings from the last layer (Meier, 2021). The per token embeddings were then element-wise average over the feature dimension.  The embeddings obtained this way all had a dimension of 1280, which is independent of protein sequence length. 
+## 5.6 Linear baseline model.
+To make a linear baseline model, we used the sci-kit learn module SGDRegressor (Pedregosa, 2011). The linear model was trained using stochastic gradient descent with 1000 updates and a starting eta of 0.01. L2 regularization was used with a parameter of 0.0001. Mean squared error was used as the loss function when training the model.
+## 5.7 Neural network architecture and training
+As nonlinear models, neural networks were chosen. The networks have three fully connected hidden layers, each equipped with 200 nodes. Each hidden layer was accompanied by rectified linear unit (ReLU) activations. To regularize the networks, batch normalization and dropout were used after each hidden layer. The rate of dropout was set to 0.4 except for the layer right before the output, which had a rate of 0.2. The output layer consisted of a single node with linear activation. The loss function was set to be the mean squared error between predictions and targets. Adam optimization algorithm was employed, along with a learning rate of 0.001, beta1 of 0.9, and beta2 of 0.99. The models were trained for a maximum of 100 epochs with a batch size of 64. To save on computation and limit the risk of overfitting, early stopping was used. The model architecture and training were all implemented using Tensorflow 2(Abadi, 2016).
+## 5.8 Oversampling techniques.
+To sample the data, each sequence was first partitioned based on their melting temperature and rounded to its nearest whole number. The sequence was then sampled with replacement such that each temperature partition contained as many sequences as the partition with most sequences before sampling. The procedure for the 'min 500' strategy mirrored that of uniform sampling, with the distinction that only partitions containing fewer than 500 sequences were subjected to resampling, aiming to reach a total of 500.
+# 6 References
+Abadi, M., Barham, P., Chen, J., Chen, Z., Davis, A., Dean, J., ... & Zheng, X. (2016). {TensorFlow}: a system for {Large-Scale} machine learning. In 12th USENIX symposium on operating systems design and implementation (OSDI 16) (pp. 265-283).
 
-## Embedding Extraction Procedure
-The following steps outline the procedure employed to extract embeddings from the ESM-1v model:
+AlQuraishi, M. (2019). ProteinNet: a standardized data set for machine learning of protein structure. BMC bioinformatics, 20(1), 1-10.
 
-Data Preparation: The protein sequence dataset used in this study was preprocessed to ensure uniformity and suitability for input to the ESM-1v model. Preprocessing steps included [describe any data preprocessing steps, such as sequence encoding or padding].
-Model Loading: The pretrained ESM-1v model was loaded into the analysis environment. This model had been trained on a diverse set of protein sequences, enabling it to capture a wide array of sequence features.
-Embedding Extraction: For each protein sequence in the dataset, we fed the sequence through the ESM-1v model and extracted the embeddings from the last layer. Specifically, we retrieved the embeddings generated by the final layer, resulting in a sequence of high-dimensional vectors.
-Averaging Embeddings: To obtain a single embedding vector for each protein sequence, we performed element-wise averaging of the embeddings extracted from the last layer. This process generated a representative embedding that encapsulated the sequence's essential features captured by the model.
+Chawla, N. V., Bowyer, K. W., Hall, L. O., & Kegelmeyer, W. P. (2002). SMOTE: synthetic minority over-sampling technique. Journal of artificial intelligence research, 16, 321-357.
 
-Embedding Utilization in Analysis
-The obtained averaged embeddings served as meaningful representations of the protein sequences. These embeddings were utilized in various downstream analyses, including [describe the specific analyses or tasks where the embeddings were used, such as classification, clustering, or similarity computation].
+Fu, L., Niu, B., Zhu, Z., Wu, S., & Li, W. (2012). CD-HIT: accelerated for clustering the next-generation sequencing data. Bioinformatics (Oxford, England), 28(23), 3150–3152. https://doi.org/10.1093/bioinformatics/bts565
 
-## Establishing base line performance of classical models
+Li, G., Buric, F., Zrimec, J., Viknander, S., Nielsen, J., Zelezniak, A., & Engqvist, M. K. (2022). Learning deep representations of enzyme thermal adaptation. Protein Science, 31(12), e4480.
 
-Logistic Regression Model as Baseline
-To establish a baseline for comparison in our analysis, we employed a logistic regression model. Logistic regression is a fundamental and interpretable machine learning algorithm often used for binary classification tasks. In this study, we utilized logistic regression as a starting point to assess the predictive power of the features on the target variable.
+Jarzab, A., Kurzawa, N., Hopf, T., Moerch, M., Zecha, J., Leijten, N., ... & Kuster, B. (2020). Meltome atlas—thermal proteome stability across the tree of life. Nature methods, 17(5), 495-503.
 
-Model Training
-The following steps outline the process of training the logistic regression model:
+Johnson, M., Zaretskaya, I., Raytselis, Y., Merezhuk, Y., McGinnis, S., & Madden, T. L. (2008). NCBI BLAST: a better web interface. Nucleic acids research, 36(suppl_2), W5-W9.
+Jumper, J., Evans, R., Pritzel, A., Green, T., Figurnov, M., Ronneberger, O., ... & Hassabis, D. (2021). Highly accurate protein structure prediction with AlphaFold. Nature, 596(7873), 583-589.
 
-Feature Selection: Relevant features were chosen based on [describe the criteria for feature selection, such as domain knowledge or data exploration].
-Data Preparation: The dataset was divided into a training set and a separate validation or testing set. Preprocessing steps were applied to the data, which included [describe any data preprocessing steps, such as normalization or handling missing values].
-Model Initialization: The logistic regression model was initialized, creating a linear combination of the selected features.
-Model Training: The model was trained using the training set. During training, the algorithm adjusted the model's parameters to minimize the logistic loss function. This process aimed to find the optimal weights for each feature.
+Meier, J., Rao, R., Verkuil, R., Liu, J., Sercu, T., & Rives, A. (2021). Language models enable zero-shot prediction of the effects of mutations on protein function. Advances in Neural Information Processing Systems, 34, 29287-29303.
 
-Model Evaluation
-The performance of the logistic regression model was evaluated using appropriate metrics, such as accuracy, precision, recall, F1-score, or ROC-AUC, depending on the nature of the classification task. The evaluation process included the following steps:
+Pedregosa, F., Varoquaux, G., Gramfort, A., Michel, V., Thirion, B., Grisel, O., ... & Duchesnay, É. (2011). Scikit-learn: Machine learning in Python. the Journal of machine Learning research, 12, 2825-2830.
 
-Prediction: The trained model was used to make predictions on the validation or testing set.
-Metric Calculation: The predictions were compared to the actual target labels, and relevant evaluation metrics were calculated to measure the model's performance.
-Interpretation: The calculated metrics provided insights into the model's ability to correctly classify instances. Additionally, a confusion matrix was generated to visualize the distribution of true positives, true negatives, false positives, and false negatives.
-Baseline Comparison
-The performance metrics obtained from the logistic regression model served as a baseline against which more complex models were compared. This comparison allowed us to assess whether more advanced algorithms or feature engineering strategies provided significant improvements over the simple logistic regression approach.
+Rives, A., Meier, J., Sercu, T., Goyal, S., Lin, Z., Liu, J., ... & Fergus, R. (2021). Biological structure and function emerge from scaling unsupervised learning to 250 million protein sequences. Proceedings of the National Academy of Sciences, 118(15), e2016239118.
 
-## Training Neural network
+Steinegger, M.,&Söding, J. (2018). Clustering huge protein sequence sets in linear time. Nature communications, 9(1), 2542.
 
-Neural Network Architecture for Model Improvement
-To enhance predictive capabilities beyond the baseline, a neural network was employed with a more intricate architecture. The neural network was designed to capture complex patterns and relationships within the data, thus enabling more advanced feature representations and improved predictive power.
+Webb, B., & Sali, A. (2016). Comparative protein structure modeling using MODELLER. Current protocols in bioinformatics, 54(1), 5-6.
 
-The architecture of the neural network comprised the following layers:
 
-The input layer, which accepted the selected relevant features for the classification task.
-Three fully connected hidden layers, each equipped with 200 nodes. These hidden layers were integrated to capture increasingly intricate and abstract features within the data. Each hidden layer was accompanied by rectified linear unit (ReLU) activations, introducing non-linearity and allowing the network to capture intricate relationships.
-Batch normalization was applied after each hidden layer to stabilize and expedite the training process. Dropout regularization was also incorporated to prevent overfitting, achieved by randomly deactivating a subset of neurons during each forward pass.
-The output layer consisted of a single node with linear activation. This configuration was apt for regression tasks, facilitating the generation of continuous predictions.
 
-Model Training and Hyperparameters
-The neural network underwent training to optimize its weights and biases for accurate predictions. The training process encompassed the following steps:
 
-Data Splitting: The dataset was partitioned into training and validation sets, with the independent test set reserved for the final evaluation. This partitioning facilitated model training and the subsequent assessment of its generalization performance.
 
-Loss Function: A suitable loss function for regression tasks was chosen to quantify the disparity between predicted and actual target values.
 
-Optimization: The Adam optimization algorithm was employed, along with a learning rate of 0.001, beta1 of 0.9, and beta2 of 0.99, to minimize the loss function and iteratively update the model's parameters.
 
-Hyperparameter Tuning: Hyperparameters, such as dropout rate and batch size, were fine-tuned to promote model convergence and performance. The chosen batch size was 64.
 
-Training and Early Stopping: Training was executed using the independent test set. The process employed early stopping to mitigate overfitting, halting training if validation loss ceased to improve.
-
-Model Evaluation
-The trained neural network's performance was evaluated using appropriate regression metrics, such as mean squared error (MSE) or mean absolute error (MAE), contingent on the task's nature. This evaluation process consisted of predicting values on the independent test set and calculating relevant regression metrics to gauge model accuracy and predictive power.
-
-Comparison with Baseline
-Performance metrics from the neural network were juxtaposed with those of the baseline model, providing insight into whether the neural network's heightened complexity led to significant improvements over the simpler logistic regression approach.
-
-## Dealing with data with long tails
-
-Over-sampling for Enhanced Recall Performance
-To address the challenge of sparse samples and imbalanced distribution within the dataset, we implemented an over-sampling strategy aimed at boosting the recall performance in regions with limited data representation. Over-sampling involves increasing the instances of underrepresented classes or samples, thereby mitigating the class imbalance issue and allowing the model to better learn patterns from these sparse regions.
-
-Data Distribution Analysis
-Prior to the application of over-sampling, a comprehensive analysis of the data distribution was conducted. This analysis identified regions of the distribution that exhibited sparse sample representation. The goal was to target these specific areas for over-sampling, thus improving the model's ability to make accurate predictions for instances that would otherwise be overlooked due to the scarcity of data.
-
-Over-sampling Procedure
-The following steps outline the procedure employed for over-sampling:
-
-Class Identification: The classes or regions of the data distribution with sparse samples were identified through the previously conducted data distribution analysis.
-Sampling Strategy: Over-sampling was applied to these identified classes or regions by generating synthetic samples using various techniques. We employed random over-sampling, SMOTE (Synthetic Minority Over-sampling Technique), and ADASYN (Adaptive Synthetic Sampling) to create synthetic instances while preserving the inherent patterns within the original data.
-Sampling Levels: Over-sampling was performed at various levels, allowing us to assess the impact of different levels of data augmentation on the model's performance. We considered increments such as 100%, 200%, and 300% over-sampling, signifying the proportionate increase in the number of synthetic instances added to the existing data.
-Model Training and Evaluation
-Following the over-sampling process, model training and evaluation were conducted to gauge the effect of the strategy on recall performance. The following steps elucidate the process:
-
-Data Splitting: The dataset was divided into training, validation, and testing sets, ensuring that the original distribution of classes within each set was maintained.
-Model Training: The model was trained using the over-sampled training data, utilizing appropriate machine learning algorithms such as neural networks, random forests, or support vector machines.
-Evaluation Metrics: The evaluation process focused on assessing the recall performance in the regions of the data distribution with sparse samples. Evaluation metrics such as precision, recall, F1-score, and confusion matrices were computed to quantify the impact of
-over-sampling on the model's ability to correctly classify instances from these regions.
